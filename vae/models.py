@@ -142,7 +142,7 @@ class CustomLSTM(nn.Module):
     def forward(self, inputs, input_lengths, state=None):
         _, total_length, _ = inputs.size()
 
-        input_packed = pack_padded_sequence(inputs, input_lengths,
+        input_packed = pack_padded_sequence(inputs, input_lengths.to(device='cpu'),
                                             batch_first=True, enforce_sorted=False)
 
         self.lstm.flatten_parameters()
@@ -643,6 +643,10 @@ class QuestionDecoder(nn.Module):
 
 class DiscreteVAE(nn.Module):
     def __init__(self, args):
+        """
+        加载vae模型
+        args:
+        """
         super(DiscreteVAE, self).__init__()
         tokenizer = BertTokenizer.from_pretrained(args.bert_model)
         padding_idx = tokenizer.vocab['[PAD]']

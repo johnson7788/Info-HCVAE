@@ -1,5 +1,5 @@
 import random
-
+import os
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
@@ -9,6 +9,11 @@ from squad_utils import (convert_examples_to_features_answer_id,
 
 
 def get_squad_data_loader(tokenizer, file, shuffle, args):
+    cache_file = f"{file}.cache"
+    if os.path.exists(cache_file) and args.debug:
+        loaddata = torch.load(cache_file)
+        data_loader, examples, features = loaddata["data_loader"], loaddata["examples"],loaddata["features"]
+        return data_loader, examples, features
     examples = read_squad_examples(file, is_training=True, debug=args.debug)
     features = convert_examples_to_features_answer_id(examples,
                                                       tokenizer=tokenizer,
@@ -28,6 +33,8 @@ def get_squad_data_loader(tokenizer, file, shuffle, args):
     all_data = TensorDataset(all_c_ids, all_q_ids, all_a_ids, all_start_positions, all_end_positions)
     data_loader = DataLoader(all_data, args.batch_size, shuffle=shuffle)
     # 返回dataloder，样本原始数据，和特征数据（变成id的数据）
+    if args.debug:
+        torch.save({"data_loader":data_loader, "examples":examples, "features":features}, cache_file)
     return data_loader, examples, features
 
 def get_harv_data_loader(tokenizer, file, shuffle, ratio, args):

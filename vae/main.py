@@ -37,8 +37,8 @@ def main(args):
             = batch_to_device(batch, args.device)
             trainer.train(c_ids, q_ids, a_ids, start_positions, end_positions)
             
-            str1 = 'Q REC : {:06.4f} A REC : {:06.4f}'
-            str2 = 'ZQ KL : {:06.4f} ZA KL : {:06.4f} INFO : {:06.4f}'
+            str1 = '问题的交叉熵损失 : {:06.4f} 答案的交叉熵损失: {:06.4f}'
+            str2 = 'ZQ KL,问题的各项同性高斯分布KL散度损失: {:06.4f} ZA KL答案的类别分类的KL散度损失: {:06.4f} 互信息损失: {:06.4f}'
             str1 = str1.format(float(trainer.loss_q_rec), float(trainer.loss_a_rec))
             str2 = str2.format(float(trainer.loss_zq_kl), float(trainer.loss_za_kl), float(trainer.loss_info))
             loss_log1.set_description_str(str1)
@@ -93,10 +93,10 @@ if __name__ == "__main__":
     parser.add_argument('--dec_q_nhidden', type=int, default=900,help='问题解码器的隐藏层维度')
     parser.add_argument('--dec_q_nlayers', type=int, default=2,help='论文图1（c)问题解码器的隐藏层层数')
     parser.add_argument('--dec_q_dropout', type=float, default=0.3)
-    parser.add_argument('--nzqdim', type=int, default=50)
-    parser.add_argument('--nza', type=int, default=20)
-    parser.add_argument('--nzadim', type=int, default=10)
-    parser.add_argument('--lambda_kl', type=float, default=0.1)
+    parser.add_argument('--nzqdim', type=int, default=50, help='注意力维度')
+    parser.add_argument('--nza', type=int, default=20,help='注意力维度')
+    parser.add_argument('--nzadim', type=int, default=10,help='注意力维度')
+    parser.add_argument('--lambda_kl', type=float, default=0.1,help='问题和答案损失之和进行缩放')
     parser.add_argument('--lambda_info', type=float, default=1.0,help='论文中最终损失公式中互信息损失的权重，影响问题和答案的一致性')
 
     args = parser.parse_args()

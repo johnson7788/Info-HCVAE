@@ -26,6 +26,7 @@ This code is written in Python. Dependencies include
 * json-lines
 * tqdm
 * [pytorch_scatter](https://github.com/rusty1s/pytorch_scatter)
+  如果安装了torch 1.8，那么conda install pytorch-scatter -c pyg 或者 pip install torch-scatter -f https://data.pyg.org/whl/torch-1.8.0+cu111.html
   如果安装了torch 1.9，那么安装方法: pip install torch-scatter -f https://data.pyg.org/whl/torch-1.9.0+cpu.html
 * [transfomers](https://github.com/huggingface/transformers)
 

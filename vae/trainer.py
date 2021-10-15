@@ -6,10 +6,13 @@ from models import DiscreteVAE, return_mask_lengths
 
 class VAETrainer(object):
     def __init__(self, args):
+        """
+        初始化模型
+        """
         self.args = args
         self.clip = args.clip
         self.device = args.device
-
+        #加载vae模型
         self.vae = DiscreteVAE(args).to(self.device)
         params = filter(lambda p: p.requires_grad, self.vae.parameters())
         self.optimizer = torch.optim.Adam(params, lr=args.lr)
