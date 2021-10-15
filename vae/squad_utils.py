@@ -399,7 +399,7 @@ def convert_examples_to_harv_features(examples, tokenizer, max_seq_length,
 
 def convert_examples_to_features_answer_id(examples, tokenizer, max_seq_length,
                                            doc_stride, max_query_length, max_ans_length, is_training):
-    """Loads a data file into a list of `InputBatch`s.
+    """数据变成id，Loads a data file into a list of `InputBatch`s.
        In addition to the original InputFeature class, it contains 
        c_ids: ids for context
        tag ids: indicate the answer span of context,
@@ -569,7 +569,7 @@ def convert_examples_to_features_answer_id(examples, tokenizer, max_seq_length,
             context_segment_ids = [0] * len(c_ids)
             for answer_idx in range(noq_start_position, noq_end_position + 1):
                 context_segment_ids[answer_idx] = 1
-            # BIO tagging scheme
+            # BIO tagging scheme, 类似BIO的策略，答案开始的位置设为1，其它答案位置设为2，剩余所有上下文为0
             tag_ids = [0] * len(c_ids)  # Outside
             if noq_start_position is not None and noq_end_position is not None:
                 tag_ids[noq_start_position] = 1  # Begin

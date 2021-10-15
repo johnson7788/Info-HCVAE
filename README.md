@@ -26,6 +26,7 @@ This code is written in Python. Dependencies include
 * json-lines
 * tqdm
 * [pytorch_scatter](https://github.com/rusty1s/pytorch_scatter)
+  如果安装了torch 1.9，那么安装方法: pip install torch-scatter -f https://data.pyg.org/whl/torch-1.9.0+cpu.html
 * [transfomers](https://github.com/huggingface/transformers)
 
 
@@ -44,7 +45,7 @@ wget https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v1.1.json -O ./squad
 用以下命令训练Info-HCVAE。checkpoint将被保存在 ./save/vae-checkpoint.
 ```bash
 cd vae
-python main.py
+python main.py --debug
 ```
 ## 生成问答对 
 从未标注的段落生成QA对。如果你从SQuAD生成QA对，请使用选项-squad。
@@ -73,6 +74,66 @@ python main.py --devices 0_1_2_3 --pretrain_file $PATH_TO_semieval --unlabel_rat
 从[这里](https://drive.google.com/file/d/1CdhslOycNFDwnDo7e8c7GaxvYxHrUlFG/view?usp=sharing)下载数据并解压到根目录下。
 data/harv_synthetic_data_qae文件夹包含从Harvesting QA数据集中生成的QA对，没有经过任何过滤。
 另一个文件夹data/harv_synthetic_data_semi包含相同的生成的QA对，但有后处理。如果F1低于阈值，我们用预训练的BERT QA模型替换生成的答案。
+
+
+## 训练样本示例
+```angular2html
+{
+  "context": "Architecturally, the school has a Catholic character. Atop the Main Building\u0027s gold dome is a golden statue of the Virgin Mary. Immediately in front of the Main Building and facing it, is a copper statue of Christ with arms upraised with the legend \"Venite Ad Me Omnes\". Next to the Main Building is the Basilica of the Sacred Heart. Immediately behind the basilica is the Grotto, a Marian place of prayer and reflection. It is a replica of the grotto at Lourdes, France where the Virgin Mary reputedly appeared to Saint Bernadette Soubirous in 1858. At the end of the main drive (and in a direct line that connects through 3 statues and the Gold Dome), is a simple, modern stone statue of Mary.",
+  "qas": [
+    {
+      "answers": [
+        {
+          "answer_start": 515,
+          "text": "Saint Bernadette Soubirous"
+        }
+      ],
+      "question": "To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France?",
+      "id": "5733be284776f41900661182"
+    },
+    {
+      "answers": [
+        {
+          "answer_start": 188,
+          "text": "a copper statue of Christ"
+        }
+      ],
+      "question": "What is in front of the Notre Dame Main Building?",
+      "id": "5733be284776f4190066117f"
+    },
+    {
+      "answers": [
+        {
+          "answer_start": 279,
+          "text": "the Main Building"
+        }
+      ],
+      "question": "The Basilica of the Sacred heart at Notre Dame is beside to which structure?",
+      "id": "5733be284776f41900661180"
+    },
+    {
+      "answers": [
+        {
+          "answer_start": 381,
+          "text": "a Marian place of prayer and reflection"
+        }
+      ],
+      "question": "What is the Grotto at Notre Dame?",
+      "id": "5733be284776f41900661181"
+    },
+    {
+      "answers": [
+        {
+          "answer_start": 92,
+          "text": "a golden statue of the Virgin Mary"
+        }
+      ],
+      "question": "What sits on top of the Main Building at Notre Dame?",
+      "id": "5733be284776f4190066117e"
+    }
+  ]
+}
+```
 
 
 ## Reference

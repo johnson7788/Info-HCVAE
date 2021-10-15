@@ -17,7 +17,7 @@ def get_squad_data_loader(tokenizer, file, shuffle, args):
                                                       max_ans_length=args.max_q_len,
                                                       doc_stride=128,
                                                       is_training=True)
-
+    # 所有context的id, all_q_ids是问题的id, all_a_ids是问题的id, all_tag_ids: 答案在上下文中的编码： 类似BIO的策略，答案开始的位置设为1，其它答案位置设为2，剩余所有上下文为0
     all_c_ids = torch.tensor([f.c_ids for f in features], dtype=torch.long)
     all_q_ids = torch.tensor([f.q_ids for f in features], dtype=torch.long)
     all_tag_ids = torch.tensor([f.tag_ids for f in features], dtype=torch.long)
@@ -27,7 +27,7 @@ def get_squad_data_loader(tokenizer, file, shuffle, args):
 
     all_data = TensorDataset(all_c_ids, all_q_ids, all_a_ids, all_start_positions, all_end_positions)
     data_loader = DataLoader(all_data, args.batch_size, shuffle=shuffle)
-
+    # 返回dataloder，样本原始数据，和特征数据（变成id的数据）
     return data_loader, examples, features
 
 def get_harv_data_loader(tokenizer, file, shuffle, ratio, args):
